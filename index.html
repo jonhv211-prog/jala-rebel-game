@@ -4,239 +4,508 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jala-Rebel: Hackeando la Estrella de la Muerte</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-
         body {
-            background-color: #05050f;
-            /* Fondo estilo espacio profundo con estrellas de píxeles simuladas */
-            background-image: 
-                radial-gradient(white 1px, transparent 0),
-                radial-gradient(rgba(255,215,0,0.5) 1px, transparent 0);
-            background-size: 50px 50px, 80px 80px;
-            background-position: 0 0, 25px 25px;
-            color: #00FF00;
-            font-family: 'Courier New', Courier, monospace;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            font-family: 'Share Tech Mono', monospace;
+            background-color: #030712;
+            color: #90e0ef;
+            overflow-x: hidden;
         }
-
-        .container {
-            width: 100%;
-            max-width: 900px;
+        .pixel-font {
+            font-family: 'Press Start 2P', monospace;
         }
-
-        /* Monitor Superior Estilo Retro */
-        .monitor {
-            border: 4px solid #FFD700;
-            background-color: rgba(5, 5, 10, 0.95);
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.4), inset 0 0 15px rgba(0, 255, 0, 0.2);
-            text-align: center;
-            position: relative;
+        /* Starry space animated background */
+        .space-bg {
+            background: radial-gradient(ellipse at bottom, #0b132b 0%, #030712 100%);
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -2;
         }
-
-        .monitor::before {
-            content: "SEC-SYS v4.1 // JALA-UNIV";
-            position: absolute;
-            top: -10px;
-            left: 20px;
-            background: #05050f;
-            color: #FFD700;
-            font-size: 0.7rem;
-            padding: 0 5px;
-            font-weight: bold;
+        .stars {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background-image: radial-gradient(2px 2px at 20px 30px, #ffffff, rgba(0,0,0,0)),
+                              radial-gradient(2px 2px at 40px 70px, #90e0ef, rgba(0,0,0,0)),
+                              radial-gradient(1px 1px at 90px 40px, #ffffff, rgba(0,0,0,0)),
+                              radial-gradient(2px 2px at 160px 120px, #00b4d8, rgba(0,0,0,0));
+            background-repeat: repeat;
+            background-size: 200px 200px;
+            animation: twinkle 5s linear infinite;
+            z-index: -1;
+            opacity: 0.6;
         }
-
-        h1 {
-            color: #FFD700;
-            font-size: 1.2rem;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px #ff0000;
+        @keyframes twinkle {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-200px); }
         }
-
-        .password-display {
-            font-size: 2.2rem;
-            font-weight: bold;
-            color: #FFFFFF;
-            letter-spacing: 8px;
-            margin: 15px 0;
-            text-shadow: 0 0 10px #00ffff;
+        .crt-scanlines {
+            background: linear-gradient(
+                rgba(18, 16, 16, 0) 50%, 
+                rgba(0, 0, 0, 0.25) 50%
+            ), linear-gradient(
+                90deg,
+                rgba(0, 180, 216, 0.04),
+                rgba(144, 224, 239, 0.02),
+                rgba(0, 150, 199, 0.04)
+            );
+            background-size: 100% 4px, 6px 100%;
+            pointer-events: none;
         }
-
-        .combinatoria {
-            font-size: 0.9rem;
-            color: #00FF00;
-            line-height: 1.4;
+        .glow-blue {
+            text-shadow: 0 0 8px rgba(0, 180, 216, 0.8), 0 0 20px rgba(0, 150, 199, 0.4);
         }
-
-        /* Consola Central Estilo Terminal Halcón Milenario */
-        .console-box {
-            border: 4px solid #FF3333;
-            background-color: rgba(2, 2, 5, 0.95);
-            padding: 25px;
-            min-height: 350px;
-            box-shadow: 0 0 15px rgba(255, 51, 51, 0.4);
-            position: relative;
+        .glow-amber {
+            text-shadow: 0 0 8px rgba(255, 176, 0, 0.8), 0 0 20px rgba(255, 176, 0, 0.4);
         }
-
-        .console-title {
-            color: #FF3333;
-            font-weight: bold;
-            font-size: 1.1rem;
-            margin-bottom: 15px;
-            text-shadow: 1px 1px #550000;
+        .terminal-box {
+            background: rgba(8, 15, 30, 0.85);
+            border: 2px solid #00b4d8;
+            box-shadow: inset 0 0 15px rgba(0, 180, 216, 0.25), 0 0 20px rgba(0, 180, 216, 0.3);
+            backdrop-filter: blur(5px);
         }
-
-        /* Avatar Pixel Art Estilo Jedi Jala */
-        .pixel-avatar {
-            float: right;
-            border: 2px solid #FFD700;
-            background: #0f0f1a;
-            padding: 8px;
-            text-align: center;
-            font-size: 0.75rem;
-            color: #FFD700;
-            box-shadow: 2px 2px 0px #FF3333;
-            margin-left: 15px;
-            margin-bottom: 10px;
+        .pixel-border {
+            box-shadow: 
+                -2px 0 0 0 #00b4d8,
+                2px 0 0 0 #00b4d8,
+                0 -2px 0 0 #00b4d8,
+                0 2px 0 0 #00b4d8;
         }
-
-        .question-text {
-            font-size: 1.05rem;
-            margin-bottom: 20px;
-            line-height: 1.5;
-            color: #00FF00;
+        ::-webkit-scrollbar {
+            width: 8px;
         }
-
-        .option-label {
-            display: block;
-            background: #0a0a1a;
-            border: 2px solid #333366;
-            padding: 12px;
-            margin-bottom: 10px;
-            cursor: pointer;
-            transition: 0.2s;
-            font-size: 0.95rem;
+        ::-webkit-scrollbar-track {
+            background: #030712;
         }
-
-        .option-label:hover {
-            border-color: #FFD700;
-            background: #15152a;
-            color: #FFD700;
+        ::-webkit-scrollbar-thumb {
+            background: #00b4d8;
+            border-radius: 2px;
         }
-
-        input[type="radio"] {
-            margin-right: 10px;
-            accent-color: #FFD700;
+        @keyframes bounce-gentle {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
         }
-
-        .btn-inject {
-            background-color: #1a1a00;
-            color: #FFD700;
-            border: 3px solid #FFD700;
-            padding: 12px 20px;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 20px;
-            width: 100%;
-            box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
-            transition: 0.2s;
-        }
-
-        .btn-inject:hover {
-            background-color: #332200;
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
-        }
-
-        .theory-box {
-            margin-top: 20px;
-            padding: 15px;
-            background-color: #001a1a;
-            border-left: 5px solid #00FFFF;
-            color: #00FFFF;
-            font-size: 0.95rem;
-            line-height: 1.4;
-            display: none;
-            box-shadow: inset 0 0 10px rgba(0, 255, 255, 0.2);
+        .animate-bounce-gentle {
+            animation: bounce-gentle 2s ease-in-out infinite;
         }
     </style>
 </head>
-<body>
+<body class="min-h-screen flex flex-col justify-between relative select-none">
+    
+    <!-- Background Elements -->
+    <div class="space-bg"></div>
+    <div class="stars"></div>
+    <div class="fixed inset-0 crt-scanlines z-50 pointer-events-none"></div>
 
-<div class="container">
-    <!-- Monitor Superior -->
-    <div class="monitor">
-        <h1>=== ALIANZA REBELDE: HACKEANDO LA ESTRELLA DE LA MUERTE ===</h1>
-        <div class="password-display" id="passwordDisplay">[* * * * *]</div>
-        <div class="combinatoria" id="combinatoriaDisplay">Cálculo Inicial: 36^5 = 60,466,176 posibilidades</div>
-    </div>
-
-    <!-- Consola de Intercepción -->
-    <div class="console-box">
-        <div class="pixel-avatar">
-            <div>[JALA JEDI]</div>
-            <div style="font-size: 1.8rem; margin: 4px 0;">🛡️⚡</div>
-            <div style="font-size: 0.65rem; color: #00ffff;">ING. SOFTWARE</div>
+    <header class="w-full border-b border-[#00b4d8]/40 bg-black/80 py-3 px-4 md:px-8 flex flex-wrap justify-between items-center z-10 backdrop-blur">
+        <div class="flex items-center space-x-3">
+            <div class="w-8 h-8 bg-[#00b4d8] flex items-center justify-center text-black font-bold pixel-font text-xs pixel-border">
+                JR
+            </div>
+            <div>
+                <h1 class="pixel-font text-xs md:text-sm text-[#90e0ef] glow-blue">JALA-REBEL v2.1</h1>
+                <p class="text-xs text-[#0096c7]">MATH-112: Discretas | Acad. Jala University</p>
+            </div>
         </div>
-        
-        <div class="console-title">[ CONSOLA DE INTERCEPTACIÓN IMPERIAL ]</div>
-        <div class="question-text" id="questionText">Cargando sistemas...</div>
-        
-        <div id="optionsContainer"></div>
+        <div class="flex items-center space-x-4 mt-2 md:mt-0 text-xs text-amber-400">
+            <span class="px-2 py-1 border border-amber-500/50 rounded bg-amber-950/30">SABLE LUZ: ACTIVO (AZUL)</span>
+            <span id="header-timer" class="font-mono">00:00</span>
+        </div>
+    </header>
 
-        <button class="btn-inject" id="btnInject" onclick="verificarRespuesta()">> INYECTAR CÓDIGO AL IMPERIO</button>
+    <main class="flex-grow container mx-auto px-4 py-6 max-w-6xl grid grid-cols-1 lg:grid-cols-3 gap-6 z-10 mb-20">
+        
+        <!-- Left Column: Combinatorial Status Monitor & Formulae -->
+        <section class="lg:col-span-1 terminal-box p-4 rounded flex flex-col justify-between space-y-4">
+            <div>
+                <div class="flex items-center justify-between border-b border-[#00b4d8]/30 pb-2 mb-3">
+                    <h2 class="pixel-font text-xs text-[#90e0ef]">MONITOR COMBINATORIO</h2>
+                    <span class="w-2 h-2 rounded-full bg-[#00b4d8] animate-ping"></span>
+                </div>
+                
+                <p class="text-xs text-[#90e0ef]/90 mb-3 leading-relaxed">
+                    Seguridad imperial: contraseña de longitud <span class="text-amber-400 font-bold">n = 8</span> y alfabeto <span class="text-amber-400 font-bold">m = 36</span> símbolos.
+                </p>
 
-        <div class="theory-box" id="theoryBox"></div>
+                <!-- Formulas Reference Box -->
+                <div class="bg-black/60 p-3 rounded border border-[#00b4d8]/40 text-[11px] mb-3 space-y-2">
+                    <p class="text-[#00b4d8] font-bold">📐 Fórmulas Operativas:</p>
+                    <div class="text-cyan-200">
+                        <span class="text-amber-400">1. Inicial:</span> $m^n$ (Variación con repetición)<br>
+                        <span class="text-amber-400">2. Actualización:</span> $1 \times m^{(n-1)}$ por celda descubierta.
+                    </div>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="space-y-3 text-xs">
+                    <div class="bg-black/50 p-2.5 rounded border border-[#00b4d8]/20">
+                        <span class="text-[#0096c7] block text-[10px]">TOTAL INICIAL ($36^8$):</span>
+                        <span id="stat-initial" class="text-[#90e0ef] font-bold text-sm">2,821,109,907,456</span>
+                    </div>
+
+                    <div class="bg-black/50 p-2.5 rounded border border-amber-500/30">
+                        <span class="text-amber-500 block text-[10px]">POSIBILIDADES ACTUALES:</span>
+                        <span id="stat-current" class="text-amber-400 font-bold text-sm glow-amber">2,821,109,907,456</span>
+                    </div>
+
+                    <div class="bg-black/50 p-2.5 rounded border border-[#00b4d8]/20">
+                        <span class="text-[#0096c7] block text-[10px]">FIREWALLS SUPERADOS:</span>
+                        <div class="flex justify-between items-center mt-1">
+                            <span id="stat-solved-count" class="text-[#90e0ef] font-bold text-sm">0 / 5</span>
+                            <div class="w-24 bg-gray-900 h-2 rounded overflow-hidden border border-[#00b4d8]/40">
+                                <div id="progress-bar" class="bg-[#00b4d8] h-full w-0 transition-all duration-500"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pixel Art Star Wars Graphic Container -->
+            <div class="border border-[#00b4d8]/30 bg-black/80 p-3 rounded flex flex-col items-center justify-center">
+                <p class="text-[10px] text-[#00b4d8] mb-2 tracking-widest">[ESTACIÓN IMPERIAL]</p>
+                <div id="pixel-art-screen" class="font-mono text-center leading-none text-[9px] text-[#00b4d8] py-1">
+                    <pre class="glow-blue">
+    /\    
+   /__\   
+  |====|  
+  |*  *|  
+ /|//\\|\ 
+/ |    | \
+    </pre>
+                </div>
+                <p id="target-status-text" class="text-[10px] text-amber-400 mt-2 text-center">ESCUDOS AL 100%</p>
+            </div>
+        </section>
+
+        <!-- Right/Center Column: Interactive Firewall Console -->
+        <section class="lg:col-span-2 terminal-box p-6 rounded flex flex-col justify-between">
+            <div id="console-screen">
+                <!-- Top Terminal Header -->
+                <div class="flex items-center justify-between border-b border-[#00b4d8]/30 pb-2 mb-4">
+                    <span class="text-xs text-[#90e0ef] font-mono flex items-center">
+                        <span class="text-amber-400 mr-2">root@jala-rebel:~#</span> <span id="current-node-label">INICIANDO_SECUENCIA_HACKEO</span>
+                    </span>
+                    <span id="node-counter" class="text-xs text-[#0096c7]">FIREWALL 1 de 5</span>
+                </div>
+
+                <!-- Welcome Screen / Story Intro -->
+                <div id="intro-view" class="space-y-4">
+                    <div class="bg-black/60 p-4 rounded border border-[#00b4d8]/40 text-sm leading-relaxed text-[#90e0ef]">
+                        <p class="mb-3 text-amber-400 pixel-font text-xs">¡BIENVENIDO, INGENIERO DE JALA UNIVERSITY!</p>
+                        <p class="mb-2">Infiltración en servidores centrales de la Estrella de la Muerte bajo estética Jedi de sable de luz azul.</p>
+                        <p class="mb-2">Supera <strong>5 firewalls teóricos</strong> basados en Matemáticas Discretas (Inducción, Combinatoria y Relaciones).</p>
+                        <p class="text-[#00b4d8] text-xs mt-3">👉 Cada acierto reducirá exponencialmente las combinaciones usando la fórmula <code class="text-amber-400">1 * m^(n-1)</code> y mostrará su fundamento matemático.</p>
+                    </div>
+
+                    <button onclick="startGame()" class="w-full py-3 bg-[#0096c7]/20 hover:bg-[#00b4d8] hover:text-black border border-[#00b4d8] text-[#90e0ef] font-bold pixel-font text-xs transition duration-300 rounded cursor-pointer shadow-lg">
+                        ▶ INICIAR INFILTRACIÓN JEDI
+                    </button>
+                </div>
+
+                <!-- Quiz / Firewall View -->
+                <div id="quiz-view" class="hidden space-y-4">
+                    <div id="question-box" class="bg-black/70 p-4 rounded border border-[#00b4d8]/40 text-sm leading-relaxed text-cyan-100 min-h-[110px]">
+                        <!-- Question text injected dynamically -->
+                    </div>
+
+                    <!-- Options Container -->
+                    <div id="options-container" class="space-y-2.5">
+                        <!-- Options injected dynamically -->
+                    </div>
+
+                    <!-- Detailed Explanation & Formula Feedback Box -->
+                    <div id="feedback-box" class="hidden p-3 rounded text-xs font-mono border">
+                        <!-- Feedback injected dynamically -->
+                    </div>
+                </div>
+
+                <!-- Victory / End View -->
+                <div id="victory-view" class="hidden space-y-4 text-center py-6">
+                    <div class="pixel-font text-sm md:text-base text-amber-400 glow-amber mb-3">
+                        🎉 ¡ESTRELLA DE LA MUERTE HACKEADA! 🎉
+                    </div>
+                    <div class="bg-black/80 p-5 rounded border border-[#00b4d8] text-[#90e0ef] text-xs md:text-sm leading-relaxed space-y-3">
+                        <p>¡Excelente trabajo, Ingeniero Jedi! Has aplicado con éxito Inducción, Combinatoria y Teoría de Relaciones.</p>
+                        <p class="text-amber-400">Los escudos deflectores han caído por completo.</p>
+                        <div class="bg-[#00b4d8]/10 p-3 rounded border border-[#00b4d8]/50 font-mono text-xs text-[#90e0ef]">
+                            > CLAVE MAESTRA DESCIFRADA: <span class="text-amber-400 font-bold">JALA-REBEL-2026</span><br>
+                            > REDUCCIÓN FINAL: <span class="text-amber-400">100% COMPLETADA</span>
+                        </div>
+                    </div>
+                    <button onclick="resetGame()" class="py-3 px-6 bg-[#0096c7]/20 hover:bg-[#00b4d8] hover:text-black border border-[#00b4d8] text-[#90e0ef] font-bold pixel-font text-xs transition duration-300 rounded cursor-pointer">
+                        🔄 REINICIAR SISTEMA
+                    </button>
+                </div>
+            </div>
+
+            <!-- Console Footer Status -->
+            <div class="border-t border-[#00b4d8]/30 pt-3 mt-4 flex justify-between items-center text-[10px] text-[#0096c7]">
+                <span>SABLE LASER AZUL: #00b4d8</span>
+                <span id="connection-status">ESTADO: LISTO</span>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Floating Pixel Art Jedi Programmer Avatar (Bottom Right) -->
+    <div id="jedi-avatar-container" class="fixed bottom-4 right-4 z-40 bg-black/90 border-2 border-[#00b4d8] p-3 rounded-lg shadow-2xl flex items-center space-x-3 backdrop-blur animate-bounce-gentle">
+        <div id="jedi-pixel-graphic" class="font-mono text-xs text-[#00b4d8] leading-none text-center">
+            <pre class="glow-blue text-[8px]">
+  [o_o]  
+  / | \\  
+ _/¯¯\\_ 
+            </pre>
+        </div>
+        <div class="text-xs">
+            <p class="pixel-font text-[9px] text-[#90e0ef]">JEDI DEV</p>
+            <p id="jedi-mood-text" class="text-[10px] text-amber-400 font-mono">Concentrado...</p>
+        </div>
     </div>
-</div>
 
-<script>
-    const m = 36;
-    const nTotal = 5;
-    let nActual = nTotal;
-    const passwordSecreta = "JALA5";
-    let passwordDescubierta = ["*", "*", "*", "*", "*"];
-    let preguntaActual = 0;
+    <footer class="w-full border-t border-[#00b4d8]/30 bg-black/80 py-3 px-4 text-center text-xs text-[#0096c7] z-10">
+        <p>Proyecto Colaborativo Grupo 1 - Matemáticas Discretas (MATH-112) | Prof. Rafael Martinez Vargas | Jala University</p>
+    </footer>
 
-    const preguntas = [
-        {
-            pregunta: "FIREWALL 1 - INDUCCIÓN MATEMÁTICA<br><br>Para corromper el bucle de recarga de los escudos modelado por P(n), debemos inyectar un error en la base lógica. Si logramos demostrar que el paso base es falso, ¿qué axioma estamos rompiendo para detener la secuencia?",
-            opciones: [
-                "a) La veracidad de P(k) implica P(k+1).",
-                "b) La verificación inicial de P(1) (o P(n,0)).",
-                "c) La regla del producto en k."
-            ],
-            respuesta: 1,
-            explicacion: "FUNDAMENTO TEÓRICO: El principio de Inducción Matemática exige obligatoriamente un 'Paso Base' válido (como P(1)). Si el paso base falla, toda la estructura de la demostración inductiva se derrumba."
-        },
-        {
-            pregunta: "FIREWALL 2 - TEORÍA DE RELACIONES<br><br>El paquete de datos espía debe enrutarse de forma bidireccional y redundante entre nodos x e y (si x conecta con y, y debe conectar con x). ¿Qué propiedad matemática define esto?",
-            opciones: [
-                "a) Propiedad Reflexiva: ∀x∈A, xRx",
-                "b) Propiedad Transitiva: ∀x,y,z∈A (xRy ∧ yRz) ⇒ xRz",
-                "c) Propiedad Simétrica: ∀x,y∈A, xRy ⇒ yRx"
-            ],
-            respuesta: 2,
-            explicacion: "FUNDAMENTO TEÓRICO: La Propiedad Simétrica establece la bidireccionalidad perfecta en una relación: si un elemento se relaciona con un segundo, el segundo se relaciona recíprocamente con el primero."
-        },
-        {
-            pregunta: "FIREWALL 3 - COMBINATORIA<br><br>Si un usuario crea una clave usando exactamente 3 letras diferentes (A, B, C) sin repetir ninguna, ¿cuántas combinaciones posibles puede crear en total?",
-            opciones: [
-                "a) 3 combinaciones.",
-                "b) 6 combinaciones (3!).",
-                "c) 9 combinaciones."
-            ],
-            respuesta: 1,
-            explicacion: "FUNDAMENTO TEÓRICO: Al importar el orden y no permitir repeticiones, se aplica el factorial del número total de elementos: 3! = 3 × 2 × 1 = 6 combinaciones únicas."
-        },
-        {
-            pregunta: "FIREWALL 4 - TEORÍA DE CONJUNTOS<br><br>Dado el conjunto A = {1, 2, 3} y el conjunto B = {3, 4, 5}. ¿Cuál es el resultado de la intersección de ambos conjuntos (A ∩ B)?",
-            opciones: [
-                "a) {1,
+    <script>
+        // Game state variables
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let timerSeconds = 0;
+        let timerInterval = null;
+
+        const m = 36; // Alphabet size
+        const n = 8;  // Password length
+        const initialCombinations = Math.pow(m, n); // 36^8 = 2,821,109,907,456
+
+        const questions = [
+            {
+                node: "FIREWALL_01:_INDUCCIÓN_MATEMÁTICA",
+                title: "Falla en el Bucle de Recarga de Escudos",
+                prompt: "Supongamos que el bucle de recarga de los escudos está modelado por P(n). Para corromperlo, debemos inyectar un error en la base lógica. Si logramos demostrar que el paso base es falso, ¿qué axioma de la inducción matemática estamos rompiendo para detener la secuencia?",
+                options: [
+                    { text: "a) La veracidad de P(k) implica P(k+1).", correct: false },
+                    { text: "b) La verificación inicial de P(1) (o P(n₀)).", correct: true },
+                    { text: "c) La regla del producto en k.", correct: false }
+                ],
+                explanationText: "Principio de Inducción Matemática: Consta obligatoriamente de un paso base P(1) y un paso inductivo. Al romper el paso base, invalidamos el cimiento lógico inicial.",
+                formulaText: "Fórmula de Inducción: P(n₀) ∧ ∀k ≥ n₀ [P(k) ⇒ P(k+1)] ⇒ ∀n ≥ n₀ P(n)"
+            },
+            {
+                node: "FIREWALL_02:_COMBINATORIA_Y_FACTORIALES",
+                title: "Generador de Contraseñas del Imperio",
+                prompt: "Si un usuario tiene que crear una clave usando exactamente 3 letras diferentes (A, B, C) sin repetir ninguna, ¿cuántas combinaciones posibles puede crear en total?",
+                options: [
+                    { text: "a) 3 combinaciones.", correct: false },
+                    { text: "b) 6 combinaciones (3!).", correct: true },
+                    { text: "c) 9 combinaciones.", correct: false }
+                ],
+                explanationText: "Combinatoria sin repetición: Al importar el orden, se calcula aplicando la factorial del número total de elementos: n!.",
+                formulaText: "Cálculo matemático: 3! = 3 × 2 × 1 = 6 combinaciones (ABC, ACB, BAC, BCA, CAB, CBA)"
+            },
+            {
+                node: "FIREWALL_03:_TEORÍA_DE_RELACIONES",
+                title: "Enrutamiento de Droides Astromecánicos",
+                prompt: "El paquete de datos espía debe rebotar en la base de datos de droides. Para que la red acepte la transferencia como bidireccional y redundante, la relación de conexión R debe cumplir que, si el nodo x está conectado al nodo y, el nodo y debe estar conectado de vuelta a x. ¿Qué propiedad matemática define este comportamiento?",
+                options: [
+                    { text: "a) Propiedad Reflexiva: ∀x ∈ A, xRx", correct: false },
+                    { text: "b) Propiedad Transitiva: ∀x,y,z ∈ A (xRy ∧ yRz) ⇒ xRz", correct: false },
+                    { text: "c) Propiedad Simétrica: ∀x,y ∈ A, xRy ⇒ yRx", correct: true }
+                ],
+                explanationText: "Teoría de Relaciones: La propiedad simétrica garantiza la bidireccionalidad y reciprocidad en las conexiones de red.",
+                formulaText: "Expresión formal: ∀x,y ∈ A [xRy ⇒ yRx]"
+            },
+            {
+                node: "FIREWALL_04:_TEORÍA_DE_CONJUNTOS",
+                title: "Intersección de Canales de Subespacio",
+                prompt: "Dado el conjunto A = {1, 2, 3} y el conjunto B = {3, 4, 5}. ¿Cuál es el resultado de la intersección de ambos conjuntos (A ∩ B)?",
+                options: [
+                    { text: "a) {1, 2, 3, 4, 5}", correct: false },
+                    { text: "b) {3}", correct: true },
+                    { text: "c) {1, 2, 4, 5}", correct: false }
+                ],
+                explanationText: "Teoría de Conjuntos: La intersección (∩) encuentra únicamente los elementos que pertenecen simultáneamente a ambos conjuntos.",
+                formulaText: "Operación: A ∩ B = {x | x ∈ A ∧ x ∈ B} = {3}"
+            },
+            {
+                node: "FIREWALL_05:_RELACIÓN_REFLEXIVA",
+                title: "Núcleo de Validación de Protocolo",
+                prompt: "En una relación matemática, si la regla establece que todo elemento 'x' siempre está relacionado consigo mismo (xRx), ¿cómo se denomina esta propiedad?",
+                options: [
+                    { text: "a) Propiedad Reflexiva.", correct: true },
+                    { text: "b) Propiedad Antisimétrica.", correct: false },
+                    { text: "c) Propiedad Transitiva.", correct: false }
+                ],
+                explanationText: "Teoría de Relaciones: La propiedad reflexiva dicta explícitamente que cada elemento del conjunto está relacionado consigo mismo.",
+                formulaText: "Expresión formal: ∀x ∈ A [xRx]"
+            }
+        ];
+
+        window.onload = function() {
+            updateCombinatoricDisplay(0);
+            startTimer();
+        }
+
+        function startTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timerSeconds++;
+                let mins = Math.floor(timerSeconds / 60).toString().padStart(2, '0');
+                let secs = (timerSeconds % 60).toString().padStart(2, '0');
+                document.getElementById('header-timer').innerText = `${mins}:${secs}`;
+            }, 1000);
+        }
+
+        function setJediMood(mood) {
+            const graphic = document.getElementById('jedi-pixel-graphic');
+            const text = document.getElementById('jedi-mood-text');
+            const container = document.getElementById('jedi-avatar-container');
+
+            if (mood === 'happy') {
+                graphic.innerHTML = `<pre class="glow-blue text-[8px]">\n  [^_^]  \n  \\(O)/  \n  /¯¯\\_  \n            </pre>`;
+                text.innerText = "¡Excelente, Hackeo Exitoso!";
+                container.style.borderColor = "#00ff66";
+            } else if (mood === 'sad') {
+                graphic.innerHTML = `<pre class="glow-blue text-[8px]">\n  [T_T]  \n  / | \\  \n  \\_|_/  \n            </pre>`;
+                text.innerText = "¡Firewall activo! Reintenta.";
+                container.style.borderColor = "#ef4444";
+            } else {
+                graphic.innerHTML = `<pre class="glow-blue text-[8px]">\n  [o_o]  \n  / | \\  \n _/¯¯\\_ \n            </pre>`;
+                text.innerText = "Concentrado...";
+                container.style.borderColor = "#00b4d8";
+            }
+        }
+
+        function startGame() {
+            document.getElementById('intro-view').classList.add('hidden');
+            document.getElementById('quiz-view').classList.remove('hidden');
+            document.getElementById('connection-status').innerText = 'ESTADO: HACKEANDO FIREWALLS';
+            loadQuestion();
+        }
+
+        function updateCombinatoricDisplay(solvedCount) {
+            document.getElementById('stat-initial').innerText = initialCombinations.toLocaleString();
+            
+            let currentPossibilities;
+            if (solvedCount === 0) {
+                currentPossibilities = initialCombinations;
+            } else {
+                currentPossibilities = 1 * Math.pow(m, n - solvedCount);
+            }
+
+            document.getElementById('stat-current').innerText = currentPossibilities.toLocaleString();
+            document.getElementById('stat-solved-count').innerText = `${solvedCount} / ${questions.length}`;
+            
+            let progressPercent = (solvedCount / questions.length) * 100;
+            document.getElementById('progress-bar').style.width = `${progressPercent}%`;
+
+            const pixelScreen = document.getElementById('pixel-art-screen');
+            const targetStatus = document.getElementById('target-status-text');
+            if (solvedCount === 0) {
+                pixelScreen.innerHTML = `<pre class="glow-blue">    /\\    \n   /__\\   \n  |====|  \n  |*  *|  \n /|//\\|\ \\\n/ |    | \\\n    </pre>`;
+                targetStatus.innerText = "ESCUDOS AL 100%";
+                targetStatus.className = "text-[10px] text-amber-400 mt-2 text-center";
+            } else if (solvedCount < 3) {
+                pixelScreen.innerHTML = `<pre class="glow-blue">    /\\    \n   /__\\   \n  |!  !|  \n  |#  #|  \n /|//\\|\ \\\n/ |====| \\\n    </pre>`;
+                targetStatus.innerText = "FIREWALLS COMPROMETIDOS";
+                targetStatus.className = "text-[10px] text-amber-400 mt-2 text-center";
+            } else if (solvedCount < 5) {
+                pixelScreen.innerHTML = `<pre class="glow-blue">    /\\    \n   /__\\   \n  |X  X|  \n  |!  !|  \n /|//\\|\ \\\n/ |====| \\\n    </pre>`;
+                targetStatus.innerText = "NÚCLEO VULNERABLE";
+                targetStatus.className = "text-[10px] text-[#90e0ef] mt-2 text-center";
+            } else {
+                pixelScreen.innerHTML = `<pre class="glow-blue">   \\//   \n   /\\   \n  [OK]    \n  |\\/\\|   \n /|//\\|\ \\\n/ |====| \\\n    </pre>`;
+                targetStatus.innerText = "¡ESCUDOS DESACTIVADOS!";
+                targetStatus.className = "text-[10px] text-[#90e0ef] font-bold mt-2 text-center";
+            }
+        }
+
+        function loadQuestion() {
+            if (currentQuestionIndex >= questions.length) {
+                showVictory();
+                return;
+            }
+
+            let q = questions[currentQuestionIndex];
+            document.getElementById('current-node-label').innerText = q.node;
+            document.getElementById('node-counter').innerText = `FIREWALL ${currentQuestionIndex + 1} de ${questions.length}`;
+            
+            document.getElementById('question-box').innerHTML = `
+                <p class="text-amber-400 font-bold mb-2 text-xs">[${q.title}]</p>
+                <p class="text-cyan-100">${q.prompt}</p>
+            `;
+
+            let optionsHtml = '';
+            q.options.forEach((opt, idx) => {
+                optionsHtml += `
+                    <button onclick="selectOption(${idx})" class="w-full text-left p-3 rounded bg-black/50 hover:bg-[#00b4d8]/20 border border-[#00b4d8]/30 hover:border-[#00b4d8] text-cyan-200 text-xs transition duration-200 cursor-pointer flex items-center">
+                        <span class="text-amber-400 mr-2 font-mono">></span> ${opt.text}
+                    </button>
+                `;
+            });
+
+            document.getElementById('options-container').innerHTML = optionsHtml;
+            document.getElementById('feedback-box').classList.add('hidden');
+            setJediMood('neutral');
+        }
+
+        function selectOption(optionIndex) {
+            let q = questions[currentQuestionIndex];
+            let selectedOpt = q.options[optionIndex];
+            let feedbackBox = document.getElementById('feedback-box');
+            feedbackBox.classList.remove('hidden');
+
+            let buttons = document.querySelectorAll('#options-container button');
+            buttons.forEach(btn => btn.disabled = true);
+
+            if (selectedOpt.correct) {
+                setJediMood('happy');
+                feedbackBox.className = "p-3 rounded text-xs font-mono border bg-[#00b4d8]/10 border-[#00b4d8] text-cyan-200 space-y-2";
+                feedbackBox.innerHTML = `
+                    <p class="text-[#90e0ef] font-bold">✅ ¡ACCESO CONCEDIDO! (FIREWALL SUPERADO)</p>
+                    <p class="text-cyan-300">💡 <strong>Explicación:</strong> ${q.explanationText}</p>
+                    <p class="text-amber-400 font-bold">📐 <strong>Fórmula/Concepto:</strong> ${q.formulaText}</p>
+                `;
+                score++;
+                updateCombinatoricDisplay(score);
+
+                setTimeout(() => {
+                    currentQuestionIndex++;
+                    loadQuestion();
+                }, 5000);
+            } else {
+                setJediMood('sad');
+                feedbackBox.className = "p-3 rounded text-xs font-mono border bg-red-950/40 border-red-500 text-red-300";
+                feedbackBox.innerHTML = `❌ <strong>¡ACCESO DENEGADO!</strong> Respuesta incorrecta. El firewall imperial bloqueó el paquete. Reintentando nodo...`;
+                
+                setTimeout(() => {
+                    buttons.forEach(btn => btn.disabled = false);
+                    feedbackBox.classList.add('hidden');
+                    setJediMood('neutral');
+                }, 3000);
+            }
+        }
+
+        function showVictory() {
+            clearInterval(timerInterval);
+            document.getElementById('quiz-view').classList.add('hidden');
+            document.getElementById('victory-view').classList.remove('hidden');
+            document.getElementById('current-node-label').innerText = 'MISIÓN_CUMPLIDA';
+            document.getElementById('connection-status').innerText = 'ESTADO: HACKEO EXITOSO';
+            setJediMood('happy');
+        }
+
+        function resetGame() {
+            currentQuestionIndex = 0;
+            score = 0;
+            timerSeconds = 0;
+            document.getElementById('victory-view').classList.add('hidden');
+            document.getElementById('intro-view').classList.remove('hidden');
+            updateCombinatoricDisplay(0);
+            startTimer();
+            document.getElementById('connection-status').innerText = 'ESTADO: LISTO';
+            setJediMood('neutral');
+        }
+    </script>
+</body>
+</html>
