@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jala-Rebel: Hackeando la Estrella de la Muerte</title>
+    <style>
+        body {
+            background-color: #020202;
+            color: #00FF00;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            width: 100%;
+            max-width: 900px;
+        }
+        .monitor {
+            border: 2px solid #00FF00;
+            background-color: #050505;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.2);
+            text-align: center;
+        }
+        h1 {
+            color: #FFD700;
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+        }
+        .password-display {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #FFFFFF;
+            letter-spacing: 5px;
+            margin: 10px 0;
+        }
+        .combinatoria {
+            font-size: 0.95rem;
+            color: #00FF00;
+        }
+        .console-box {
+            border: 1px dashed #FF3333;
+            background-color: #020202;
+            padding: 20px;
+            min-height: 350px;
+        }
+        .console-title {
+            color: #FF3333;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .question-text {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+        .option-label {
+            display: block;
+            background: #0a0a0a;
+            border: 1px solid #333;
+            padding: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .option-label:hover {
+            border-color: #00FF00;
+            background: #111;
+        }
+        input[type="radio"] {
+            margin-right: 10px;
+        }
+        .btn-inject {
+            background-color: #020202;
+            color: #FFD700;
+            border: 2px solid #FFD700;
+            padding: 10px 20px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            width: 100%;
+        }
+        .btn-inject:hover {
+            background-color: #332200;
+        }
+        .theory-box {
+            margin-top: 15px;
+            padding: 12px;
+            background-color: #001111;
+            border-left: 4px solid #00FFFF;
+            color: #00FFFF;
+            font-size: 0.95rem;
+            display: none;
+        }
+        .pixel-avatar {
+            float: right;
+            border: 1px solid #FFD700;
+            background: #111;
+            padding: 5px;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #FFD700;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Monitor Superior -->
+    <div class="monitor">
+        <h1>=== ALIANZA REBELDE: HACKEANDO LA ESTRELLA DE LA MUERTE ===</h1>
+        <div class="password-display" id="passwordDisplay">[* * * * *]</div>
+        <div class="combinatoria" id="combinatoriaDisplay">Cálculo Inicial: 36^5 = 60,466,176 posibilidades</div>
+    </div>
+
+    <!-- Consola de Intercepción -->
+    <div class="console-box">
+        <div class="pixel-avatar">
+            <div>[INGENIERO JALA]</div>
+            <div style="font-size: 1.5rem;">🧑‍💻✨</div>
+        </div>
+        <div class="console-title">[ CONSOLA DE INTERCEPTACIÓN IMPERIAL ]</div>
+        <div class="question-text" id="questionText">Cargando sistemas...</div>
+        
+        <div id="optionsContainer"></div>
+
+        <button class="btn-inject" id="btnInject" onclick="verificarRespuesta()">> INYECTAR CÓDIGO AL IMPERIO</button>
+
+        <div class="theory-box" id="theoryBox"></div>
+    </div>
+</div>
+
+<script>
+    const m = 36;
+    const nTotal = 5;
+    let nActual = nTotal;
+    const passwordSecreta = "JALA5";
+    let passwordDescubierta = ["*", "*", "*", "*", "*"];
+    let preguntaActual = 0;
+
+    const preguntas = [
+        {
+            pregunta: "FIREWALL 1 - INDUCCIÓN MATEMÁTICA<br><br>Para corromper el bucle de recarga de los escudos modelado por P(n), debemos inyectar un error en la base lógica. Si logramos demostrar que el paso base es falso, ¿qué axioma estamos rompiendo para detener la secuencia?",
+            opciones: [
+                "a) La veracidad de P(k) implica P(k+1).",
+                "b) La verificación inicial de P(1) (o P(n,0)).",
+                "c) La regla del producto en k."
+            ],
+            respuesta: 1,
+            explicacion: "FUNDAMENTO TEÓRICO: El principio de Inducción Matemática exige obligatoriamente un 'Paso Base' válido (como P(1)). Si el paso base falla, toda la estructura de la demostración inductiva se derrumba."
+        },
+        {
+            pregunta: "FIREWALL 2 - TEORÍA DE RELACIONES<br><br>El paquete de datos espía debe enrutarse de forma bidireccional y redundante entre nodos x e y (si x conecta con y, y debe conectar con x). ¿Qué propiedad matemática define esto?",
+            opciones: [
+                "a) Propiedad Reflexiva: ∀x∈A, xRx",
+                "b) Propiedad Transitiva: ∀x,y,z∈A (xRy ∧ yRz) ⇒ xRz",
+                "c) Propiedad Simétrica: ∀x,y∈A, xRy ⇒ yRx"
+            ],
+            respuesta: 2,
+            explicacion: "FUNDAMENTO TEÓRICO: La Propiedad Simétrica establece la bidireccionalidad perfecta en una relación: si un elemento se relaciona con un segundo, el segundo se relaciona recíprocamente con el primero."
+        },
+        {
+            pregunta: "FIREWALL 3 - COMBINATORIA<br><br>Si un usuario crea una clave usando exactamente 3 letras diferentes (A, B, C) sin repetir ninguna, ¿cuántas combinaciones posibles puede crear en total?",
+            opciones: [
+                "a) 3 combinaciones.",
+                "b) 6 combinaciones (3!).",
+                "c) 9 combinaciones."
+            ],
+            respuesta: 1,
+            explicacion: "FUNDAMENTO TEÓRICO: Al importar el orden y no permitir repeticiones, se aplica el factorial del número total de elementos: 3! = 3 × 2 × 1 = 6 combinaciones únicas."
+        },
+        {
+            pregunta: "FIREWALL 4 - TEORÍA DE CONJUNTOS<br><br>Dado el conjunto A = {1, 2, 3} y el conjunto B = {3, 4, 5}. ¿Cuál es el resultado de la intersección de ambos conjuntos (A ∩ B)?",
+            opciones: [
+                "a) {1, 2, 3, 4, 5}",
+                "b) {3}",
+                "c) {1, 2, 4, 5}"
+            ],
+            respuesta: 1,
+            explicacion: "FUNDAMENTO TEÓRICO: La intersección (∩) selecciona únicamente los elementos que pertenecen a ambos conjuntos de manera simultánea, siendo el '3' el único elemento común."
+        },
+        {
+            pregunta: "FIREWALL 5 - TEORÍA DE RELACIONES<br><br>En una relación matemática, si la regla establece que todo elemento 'x' siempre está relacionado consigo mismo (xRx), ¿cómo se denomina esta propiedad?",
+            opciones: [
+                "a) Propiedad Reflexiva.",
+                "b) Propiedad Antisimétrica.",
+                "c) Propiedad Transitiva."
+            ],
+            respuesta: 0,
+            explicacion: "FUNDAMENTO TEÓRICO: La Propiedad Reflexiva dicta explícitamente que cada elemento del conjunto está relacionado consigo mismo para que la relación sea válida."
+        }
+    ];
+
+    function actualizarMonitor() {
+        document.getElementById("passwordDisplay").innerText = `[ ${passwordDescubierta.join(" ")} ]`;
+        
+        let textoComb = "";
+        if (nActual === nTotal) {
+            let pos = Math.pow(m, nTotal).toLocaleString();
+            textoComb = `Cálculo Inicial: ${m}^${nTotal} = ${pos} posibilidades de cifrado`;
+        } else if (nActual === 0) {
+            textoComb = "¡NÚCLEO IMPERIAL EXPUESTO! Posibilidades restantes: 0";
+        } else {
+            let pos = Math.pow(m, nActual).toLocaleString();
+            textoComb = `Cálculo actualizado: 1 * ${m}^${nActual} = ${pos} posibilidades (¡Decaimiento exponencial!)`;
+        }
+        document.getElementById("combinatoriaDisplay").innerText = textoComb;
+    }
+
+    function cargarPregunta() {
+        document.getElementById("theoryBox").style.display = "none";
+        document.getElementById("theoryBox").innerText = "";
+        
+        if (preguntaActual < preguntas.length) {
+            let datos = preguntas[preguntaActual];
+            document.getElementById("questionText").innerHTML = "C:\\> " + datos.pregunta;
+            
+            let opcionesHTML = "";
+            for (let i = 0; i < datos.opciones.length; i++) {
+                opcionesHTML += `<label class="option-label">
+                    <input type="radio" name="respuesta" value="${i}"> ${datos.opciones[i]}
+                </label>`;
+            }
+            document.getElementById("optionsContainer").innerHTML = opcionesHTML;
+            document.getElementById("btnInject").style.display = "block";
+        } else {
+            document.getElementById("questionText").innerHTML = "C:\\> ¡SISTEMA HACKEADO!<br>C:\\> Escudos deflectores de la Estrella de la Muerte: DESACTIVADOS.<br>C:\\> ¡Excelente trabajo en equipo, Ingeniero!";
+            document.getElementById("optionsContainer").innerHTML = "";
+            document.getElementById("btnInject").style.display = "none";
+        }
+    }
+
+    function verificarRespuesta() {
+        let radios = document.getElementsByName("respuesta");
+        let seleccion = -1;
+        for (let r of radios) {
+            if (r.checked) {
+                seleccion = parseInt(r.value);
+                break;
+            }
+        }
+
+        if (seleccion === -1) {
+            alert("Comandante, debe seleccionar un parámetro antes de inyectar.");
+            return;
+        }
+
+        let preguntaInfo = preguntas[preguntaActual];
+        let theoryBox = document.getElementById("theoryBox");
+
+        if (seleccion === preguntaInfo.respuesta) {
+            passwordDescubierta[preguntaActual] = passwordSecreta[preguntaActual];
+            nActual--;
+            
+            theoryBox.style.display = "block";
+            theoryBox.innerHTML = preguntaInfo.explicacion;
+            
+            preguntaActual++;
+            actualizarMonitor();
+            
+            // Cambiar el botón temporalmente para dar paso a la siguiente
+            let btn = document.getElementById("btnInject");
+            btn.innerText = "> CONTINUAR HACKEO";
+            btn.onclick = function() {
+                btn.onclick = verificarRespuesta;
+                btn.innerText = "> INYECTAR CÓDIGO AL IMPERIO";
+                cargarPregunta();
+            };
+        } else {
+            alert("¡ALERTA! Respuesta incorrecta. El Imperio ha detectado la anomalía.");
+        }
+    }
+
+    // Inicializar juego
+    actualizarMonitor();
+    cargarPregunta();
+</script>
+
+</body>
+</html>
